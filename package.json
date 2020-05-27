@@ -1,0 +1,22 @@
+{
+  "name": "liboqs-javascript",
+  "version": "1.0.0",
+  "description": "liboqs javascript wrapper",
+  "scripts": {
+    "test": "mocha",
+    "build-client": "emcc -Ibuild/include -Wall -s TOTAL_MEMORY=22216704 -s NODERAWFS=1 -Lbuild/lib javascript/source/liboqs-client.c build/lib/liboqs.a -o javascript/liboqs-client.js -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['ccall','cwrap']\" -s ALLOW_MEMORY_GROWTH=1",
+    "build-server": "emcc -Ibuild/include -Wall -s TOTAL_MEMORY=22216704 -s NODERAWFS=1 -Lbuild/lib javascript/source/liboqs-server.c build/lib/liboqs.a -o javascript/liboqs-server.js -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['ccall','cwrap']\" -s ALLOW_MEMORY_GROWTH=1"
+  },
+  "author": "Palash Roy",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.2.0"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "request": "^2.88.2"
+  }
+}
