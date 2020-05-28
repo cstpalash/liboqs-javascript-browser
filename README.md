@@ -4,7 +4,7 @@
 
 This is a javascript wrapper (works in browser) on [liboqs C library](https://github.com/open-quantum-safe/liboqs).
 
-## How to run demo
+## How to run demo (HTML client with NodeJs/Express server)
 
 ```
 clone this repo into your local
