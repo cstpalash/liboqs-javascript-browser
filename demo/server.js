@@ -1,5 +1,6 @@
 const opn = require('opn');
 const express = require('express');
+var bodyParser = require('body-parser');
 const app = express();
 var colors = require('colors');
 var config = require('./config.js');
@@ -7,7 +8,11 @@ var path = require('path');
 colors.setTheme({ info:'brightMagenta', highlight:'brightBlue', error:'brightRed', success:'green'});
 
 app.use(express.static('demo/public'));
+app.use(bodyParser.json());
+
 app.get("/api/qs/crypto", getCrypto);
+app.post('/api/qs/sendCipher', sendCipher);
+
 
 const algo = "FrodoKEM-640-AES";
 
@@ -52,3 +57,18 @@ function getCrypto(req, res){
 		}
 	});
 }
+
+function sendCipher(req, res){
+
+	var ciphertext = req.body.ciphertext;
+
+	var decapsStatus = qsServer.ccall('Decaps', 'number', ['string'], [ ciphertext ]);
+	if(decapsStatus != 0){
+		res.send({err : "Decaps failed in server", data: null});
+	}
+	else{
+		res.send({err : null, data: { aesKey : qsServer.ccall('GetAesKey', 'string') }});
+	}
+
+}
+

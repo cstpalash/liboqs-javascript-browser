@@ -4,6 +4,16 @@
 
 This is a javascript wrapper (works in browser) on [liboqs C library](https://github.com/open-quantum-safe/liboqs).
 
+## How to run demo
+
+```
+clone this repo into your local
+cd <cloned repo>
+npm install
+npm run demo
+```
+![](demo.png)
+
 ## How to test
 
 ```
