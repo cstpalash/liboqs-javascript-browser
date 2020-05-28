@@ -4,8 +4,9 @@
   "description": "liboqs javascript wrapper",
   "scripts": {
     "test": "mocha",
-    "build-client": "emcc -Ibuild/include -Wall -s TOTAL_MEMORY=22216704 -s NODERAWFS=1 -Lbuild/lib javascript/source/liboqs-client.c build/lib/liboqs.a -o javascript/liboqs-client.js -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['ccall','cwrap']\" -s ALLOW_MEMORY_GROWTH=1",
-    "build-server": "emcc -Ibuild/include -Wall -s TOTAL_MEMORY=22216704 -s NODERAWFS=1 -Lbuild/lib javascript/source/liboqs-server.c build/lib/liboqs.a -o javascript/liboqs-server.js -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['ccall','cwrap']\" -s ALLOW_MEMORY_GROWTH=1"
+    "build-client": "emcc -Ibuild/include -Wall -s TOTAL_MEMORY=22216704 -s -Lbuild/lib javascript/source/liboqs-client.c build/lib/liboqs.a -o javascript/liboqs-client.js -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['ccall','cwrap']\" -s ALLOW_MEMORY_GROWTH=1",
+    "build-server": "emcc -Ibuild/include -Wall -s TOTAL_MEMORY=22216704 -s -Lbuild/lib javascript/source/liboqs-server.c build/lib/liboqs.a -o javascript/liboqs-server.js -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['ccall','cwrap']\" -s ALLOW_MEMORY_GROWTH=1",
+    "demo": "node demo/server"
   },
   "author": "Palash Roy",
   "license": "ISC",
@@ -16,6 +17,7 @@
   "dependencies": {
     "colors": "^1.4.0",
     "express": "^4.17.1",
+    "opn": "^6.0.0",
     "path": "^0.12.7",
     "request": "^2.88.2"
   }
