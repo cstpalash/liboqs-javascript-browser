@@ -32,9 +32,11 @@
           <p id="connection" style="display:none" class="lead"></p>
           <p id="encaps" style="display:none" class="lead">
             <a id="encrypt" href="#" class="btn btn-lg btn-secondary">Encrypt</a>
+            <div id="encryptResult" style="display:none" class="alert alert-secondary" role="alert"></div>
           </p>
-          <p id="serverResponse" style="display:none" class="lead">
+          <p id="decaps" style="display:none" class="lead">
             <a id="sendCipher" href="#" class="btn btn-lg btn-secondary">Send cipher</a>
+            <div id="cipherResult" style="display:none" class="alert alert-secondary" role="alert"></div>
           </p>
         </div>
       </main>
@@ -82,34 +84,13 @@
         
         $("#connection").hide();
         $("#encaps").hide();
-        $("#serverResponse").hide();
+        $("#encrypt").show();
+        $("#encryptResult").hide();
+        $("#decaps").hide();
+        $("#sendCipher").show();
+        $("#cipherResult").hide();
 
         FetchAlgoAndPublicKey();
-      }
-
-      function StartEncrypt(){
-
-        //prepare client
-        var prepareStatus = Module.ccall('Prepare', 'number', ['string'], [ algo ]);
-
-        if(prepareStatus != 0){
-          alert('Problem with client initialization');
-        }
-        else{
-          var encapsStatus = Module.ccall('Encaps', 'number', ['string'], [ publicKey ]);
-          if(encapsStatus != 0){
-            alert('Problem with Encaps');
-          }
-          else{
-            aes_key_client = Module.ccall('GetAesKey', 'string');
-            ciphertext = Module.ccall('GetCipherText', 'string');
-
-            $("#encaps").html(`<div class="alert alert-secondary" role="alert">AES-Client:<span class="badge badge-warning">${aes_key_client}</span> | Cipher:${wrap(ciphertext, 30)}</div>`);
-
-            $("#serverResponse").show();
-          }
-        }
-
       }
 
       function FetchAlgoAndPublicKey(){
@@ -145,6 +126,37 @@
 
       }
 
+      function StartEncrypt(){
+
+        //prepare client
+        var prepareStatus = Module.ccall('Prepare', 'number', ['string'], [ algo ]);
+
+        if(prepareStatus != 0){
+          alert('Problem with client initialization');
+        }
+        else{
+          var encapsStatus = Module.ccall('Encaps', 'number', ['string'], [ publicKey ]);
+          if(encapsStatus != 0){
+            alert('Problem with Encaps');
+          }
+          else{
+            aes_key_client = Module.ccall('GetAesKey', 'string');
+            ciphertext = Module.ccall('GetCipherText', 'string');
+
+            $("#encryptResult").html(`AES-Client:<span class="badge badge-warning">${aes_key_client}</span> | Cipher:${wrap(ciphertext, 30)}`);
+
+            $("#encryptResult").show();
+            $("#encrypt").hide();
+            
+
+            $("#decaps").show();
+          }
+        }
+
+      }
+
+      
+
       function SendCipher(){
 
         fetch(api_sendCipher, {
@@ -160,7 +172,11 @@
               $("#serverResponse").text(`Error:${data.err}`);
             }
             else{
-              $("#serverResponse").html(`<div class="alert alert-secondary" role="alert">AES-Server:<span class="badge badge-success">${data.data.aesKey}</span> - matches with the AES key generated in client</div>`);
+              $("#cipherResult").html(`AES-Server:<span class="badge badge-success">${data.data.aesKey}</span> - matches with the AES key generated in client`);
+
+              $("#cipherResult").show();
+              $("#sendCipher").hide();
+              
             }
           });
       }

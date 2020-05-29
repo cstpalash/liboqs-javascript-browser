@@ -71,7 +71,8 @@ int Decaps(char *ciphertext){
 
 	if(kem != NULL){
 
-		size_t out_len = b64_decoded_size(ciphertext)+1; //+1 for NULL terminator
+		size_t out_len = b64_decoded_size(ciphertext);
+		//+1; //+1 for NULL terminator
 
 		unsigned char *ciphertext_decoded = malloc(out_len);
 
@@ -81,7 +82,7 @@ int Decaps(char *ciphertext){
 			return 1;
 		}
 
-		ciphertext_decoded[out_len] = '\0';
+		//ciphertext_decoded[out_len] = '\0';
 
 		shared_secret_d = malloc(kem->length_shared_secret);
 
