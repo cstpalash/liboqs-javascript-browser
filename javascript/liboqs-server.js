@@ -1338,11 +1338,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 22208448,
+    STACK_BASE = 22208544,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 16965568,
-    DYNAMIC_BASE = 22208448,
-    DYNAMICTOP_PTR = 16965408;
+    STACK_MAX = 16965664,
+    DYNAMIC_BASE = 22208544,
+    DYNAMICTOP_PTR = 16965504;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1924,7 +1924,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 16964544;
+// STATICTOP = STATIC_BASE + 16964640;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -4508,7 +4508,7 @@ var ASM_CONSTS = {
   }
 
   function _emscripten_get_sbrk_ptr() {
-      return 16965408;
+      return 16965504;
     }
 
   function _emscripten_memcpy_big(dest, src, num) {
@@ -4773,10 +4773,17 @@ var _GetAesKey = Module["_GetAesKey"] = function() {
 };
 
 /** @type {function(...*):?} */
-var _Cleanup = Module["_Cleanup"] = function() {
+var _CleanupDecaps = Module["_CleanupDecaps"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
-  return Module["asm"]["Cleanup"].apply(null, arguments)
+  return Module["asm"]["CleanupDecaps"].apply(null, arguments)
+};
+
+/** @type {function(...*):?} */
+var _CleanupAll = Module["_CleanupAll"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return Module["asm"]["CleanupAll"].apply(null, arguments)
 };
 
 /** @type {function(...*):?} */

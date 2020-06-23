@@ -68,6 +68,7 @@ function sendCipher(req, res){
 	}
 	else{
 		res.send({err : null, data: { aesKey : qsServer.ccall('GetAesKey', 'string') }});
+		qsServer.ccall('CleanupDecaps', 'void');
 	}
 
 }

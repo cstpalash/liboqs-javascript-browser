@@ -129,6 +129,7 @@
       function StartEncrypt(){
 
         //prepare client
+	Module.ccall('CleanupAll', 'void');
         var prepareStatus = Module.ccall('Prepare', 'number', ['string'], [ algo ]);
 
         if(prepareStatus != 0){

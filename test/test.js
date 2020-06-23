@@ -34,7 +34,7 @@ describe("liboqs", function(){
 
 	it("client should encaps with public-key and generate aes key and ciphertext", function(done){
 
-		client = require("../javascript/liboqs-client.js");
+		client = require("../demo/public/dist/js/liboqs-client.js");
 		client["onRuntimeInitialized"] = function(){
 
 			var prepareStatus = client.ccall('Prepare', 'number', ['string'], [ algo ]);
@@ -75,9 +75,49 @@ describe("liboqs", function(){
 
 	});
 
+	it("client should encaps a 2nd time with public-key and generate aes key and ciphertext", function(done){
+
+	        client.ccall('CleanupEncaps', 'void');
+
+		//Encaps
+		var encapsStatus = client.ccall('Encaps', 'number', ['string'], [ public_key ]);
+		expect(encapsStatus).to.equal(0);
+
+		//Get AES key and Cipher text - base64 encoded
+		aes_key_client = client.ccall('GetAesKey', 'string');
+		expect(aes_key_client.length).to.not.equal(0);
+		console.log(Buffer.from(aes_key_client, 'base64').length);
+
+		cipher_text = client.ccall('GetCipherText', 'string');
+		expect(cipher_text.length).to.not.equal(0);
+
+		done();
+
+	});
+
+	it("server should decaps a 2nd time with secret key and ciphertext and generate the same aes key", function(done){
+
+		server.ccall('CleanupDecaps', 'void');
+		
+		var decapsStatus = server.ccall('Decaps', 'number', ['string'], [ cipher_text ]);
+		expect(decapsStatus).to.equal(0);
+
+		//Get AES key - base64 encoded
+		aes_key_server = server.ccall('GetAesKey', 'string');
+		expect(aes_key_server.length).to.not.equal(0);
+		console.log(Buffer.from(aes_key_server, 'base64').length);
+
+		//the main test
+		expect(aes_key_server).to.equal(aes_key_client);
+
+		done();
+
+	});
+
+
 	after(function() {
-	    server.ccall('Cleanup', 'void');
-	    client.ccall('Cleanup', 'void');
+	    server.ccall('CleanupAll', 'void');
+	    client.ccall('CleanupAll', 'void');
 	});
 
 	
